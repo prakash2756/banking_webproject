@@ -15,8 +15,8 @@ def createaccount(request):
             form = SbiAccountForm(request.POST)
             if form.is_valid():
                 print('yes')
-                form.save()
-                return redirect('success')  
+                account = form.save()                
+                return redirect('success',account_number = account.account_number)  
             else:
                 return render(request, 'create-account.html', {
                     'sbi_form': form,
@@ -25,8 +25,8 @@ def createaccount(request):
         elif bank_type=='IOB':
             form = IobAccountForm(request.POST)
             if form.is_valid():
-                form.save()
-                return redirect('success')
+                account=form.save()
+                return redirect('success',account_number = account.account_number)
             else:
                 return render(request, 'create-account.html', {
                     'sbi_form': form,
@@ -38,8 +38,8 @@ def createaccount(request):
     return render(request,'create-account.html',{'sbi_form':sbi_form,'iob_form':iob_form})
 
 
-def success(request):
-    return render(request,'success.html')
+def success(request,account_number):
+    return render(request,'success.html',{'account_number':account_number})
 
 
 def loginpage(request):
