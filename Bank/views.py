@@ -16,7 +16,9 @@ def createaccount(request):
             if form.is_valid():
                 print('yes')
                 account = form.save()                
-                return redirect('success',account_number = account.account_number)  
+                request.session['account_id'] = account.id
+                request.session['bank_type'] = 'SBI'
+                return redirect('success')
             else:
                 return render(request, 'create-account.html', {
                     'sbi_form': form,
@@ -26,7 +28,9 @@ def createaccount(request):
             form = IobAccountForm(request.POST)
             if form.is_valid():
                 account=form.save()
-                return redirect('success',account_number = account.account_number)
+                request.session['account_id'] = account.id
+                request.session['bank_type'] = 'SBI'
+                return redirect('success')
             else:
                 return render(request, 'create-account.html', {
                     'sbi_form': form,
@@ -38,8 +42,19 @@ def createaccount(request):
     return render(request,'create-account.html',{'sbi_form':sbi_form,'iob_form':iob_form})
 
 
-def success(request,account_number):
-    return render(request,'success.html',{'account_number':account_number})
+def success(request):
+    account_type = request.session.get('bank_type')
+    account_id = request.session.get('account_id')
+    if not account_type or not  account_id :
+        return redirect('create-account')
+    if account_type=='SBI':
+        account =Sbiaccount.objects.get(id=account_id)
+    if  account_type=='IOB':
+        account = IoBaccount.objects.get(id=account_id)
+        
+    
+        
+    return render(request,'success.html',{'context':account})
 
 
 def loginpage(request):
@@ -72,7 +87,8 @@ def welcomepage(request):
     account_type = request.session.get('account_type')
     account_id = request.session.get('account_id')
     if account_type=='SBI':
-        account =Sbiaccount.objects.get(id=account_id)        
+        account =Sbiaccount.objects.get(id=account_id)  
+        print(account)      
     else:
         account = IoBaccount.objects.get(id=account_id)
     
