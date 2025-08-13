@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create Account</title>
+    <script>
+      function showForm() {
+        var bank = document.getElementById("bank_type").value;
+        document.getElementById("sbi_form").style.display =
+          bank === "SBI" ? "block" : "none";
+        document.getElementById("iob_form").style.display =
+          bank === "IOB" ? "block" : "none";
+      }
+    </script>
+  </head>
+  <body>
+    <h2>Create Account</h2>
+    <label for="bank_type">Select Bank:</label>
+    <select id="bank_type" name="bank_type" onchange="showForm()">
+      <option value="">--Select Bank--</option>
+      <option value="SBI">SBI</option>
+      <option value="IOB">IOB</option>
+    </select>
+    <div id="sbi_form" style="display:none;">
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="bank_type" value="SBI">
+            {{ sbi_form.as_p }}
+            <button type="submit">Submit SBI</button>
+        </form>
+    </div>
+
+    <div id="iob_form" style="display:none;">
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="bank_type" value="IOB">
+            {{ iob_form.as_p }}
+            <button type="submit">Submit IOB</button>
+        </form>
+    </div>
+</body>
+</html>
+  </body>
+</html>

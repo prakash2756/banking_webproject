@@ -1,0 +1,10 @@
+<!-- account_details.html -->
+<h2>Account Details</h2>
+<p><b>Name:</b> {{ context.account_name }}</p>
+<p><b>Email:</b> {{ context.email_address }}</p>
+<p><b>Date of Birth:</b> {{ context.dob }}</p>
+<p><b>Bank:</b> {{ context.bank_name }}</p>
+<p><b>Account Request Date:</b> {{ context.account_request }}</p>
+<a href="{% url 'login-form' %}">
+  <button type="button">Back to LoginPage</button>
+</a>
