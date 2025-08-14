@@ -58,6 +58,7 @@ class IoBaccount(models.Model):
         
         def __str__(self):
             return f"{self.account_name}{self.bank_name}{self.dob}{self.account_request}{self.email_address}"
+        
 
 class Transaction(models.Model):    
     CREDIT = 'CR'
@@ -75,5 +76,9 @@ class Transaction(models.Model):
     tran_date = models.DateTimeField(auto_now_add=True)
     receiver_name = models.CharField(max_length=200,blank=True,null=True)
     receiver_amount = models.CharField(max_length=200,blank=True,null=True)
+    
+    
+    def __str__(self):
+        return f"{self.receiver_name}{self.receiver_amount}"
     
     
