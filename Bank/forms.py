@@ -1,4 +1,4 @@
-from .models import Sbiaccount,IoBaccount
+from .models import Sbiaccount,IoBaccount,Transaction
 
 from django import forms
 
@@ -103,3 +103,52 @@ class IobAccountForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+    
+class TransactionForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        fields = ['trans_type', 'description', 'receiver_name', 'receiver_amount']
+        widgets = {
+            'trans_type': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'style': 'padding: 12px; border-radius: 8px; border: 2px solid #e0e0e0;'
+                }
+            ),
+            'description': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Enter transaction description',
+                    'style': 'padding: 12px; border-radius: 8px; border: 2px solid #e0e0e0;'
+                }
+            ),
+            'receiver_name': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Enter receiver name',
+                    'style': 'padding: 12px; border-radius: 8px; border: 2px solid #e0e0e0;'
+                }
+            ),
+            'receiver_amount': forms.NumberInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Enter amount',
+                    'min': '0',
+                    'step': '0.01',
+                    'style': 'padding: 12px; border-radius: 8px; border: 2px solid #e0e0e0;'
+                }
+            ),
+        }
+        labels = {
+            'trans_type': 'Transaction Type',
+            'description': 'Description',
+            'receiver_name': 'Receiver Name',
+            'receiver_amount': 'Amount (₹)',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['trans_type'].choices = Transaction.TYPE_CHOICES
+        for field in self.fields.values():
+            field.required = True
+        self.fields['description'].required = False
